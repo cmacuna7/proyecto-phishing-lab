@@ -1,0 +1,7 @@
+172.22.0.7 - - [22/Oct/2026:18:03:34 +0000] "POST /login HTTP/1.1" 302 199 "-" "lab-scenario/1.0"
+172.22.0.7 - - [22/Oct/2026:18:03:34 +0000] "POST /login HTTP/1.1" 401 2531 "-" "lab-scenario/1.0"
+172.22.0.7 - - [22/Oct/2026:18:03:35 +0000] "POST /login HTTP/1.1" 401 2531 "-" "lab-scenario/1.0"
+172.22.0.7 - - [22/Oct/2026:18:03:35 +0000] "POST /login HTTP/1.1" 401 2531 "-" "lab-scenario/1.0"
+172.22.0.7 - - [22/Oct/2026:18:03:35 +0000] "POST /login HTTP/1.1" 401 2531 "-" "lab-scenario/1.0"
+172.22.0.7 - - [22/Oct/2026:18:03:35 +0000] "POST /login HTTP/1.1" 302 199 "-" "lab-scenario/1.0"
+172.22.0.7 - - [22/Oct/2026:18:03:35 +0000] "POST /login HTTP/1.1" 302 199 "-" "lab-scenario/1.0"
