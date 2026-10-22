@@ -12,3 +12,4 @@
 | Nivel de riesgo estimado de fuerza bruta (R-01) | 12 (Alto) | 12 (Alto) | 6 (Moderado) | 6 (Moderado) |
 
 Notas: 'baseline' = sin controles; 'hardened' = con bloqueo y registro de auditoría. Las diferencias entre Apache y NGINX deben explicarse en el informe a partir de los registros.
+
