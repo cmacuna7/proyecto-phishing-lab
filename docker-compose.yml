@@ -66,6 +66,13 @@ services:
       -config api.addrs.addr.name=.* -config api.addrs.addr.regex=true
       -config api.disablekey=true
     ports: ["127.0.0.1:8090:8090"]
+    # El healthcheck de la imagen apunta al puerto 8080 (interfaz web), que aquí no se usa.
+    healthcheck:
+      test: ["CMD-SHELL", "bash -c 'exec 3<>/dev/tcp/127.0.0.1/8090'"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 60s
     networks: [lab-net]
 
   client1:
