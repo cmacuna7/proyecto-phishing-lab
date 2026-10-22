@@ -24,6 +24,26 @@ from urllib.parse import urlparse
 
 import requests
 
+def wait_for_proxy(proxy: str | None, timeout: int = 180) -> None:
+    """ZAP tarda en arrancar (descarga complementos): espera a que el proxy acepte conexiones."""
+    if not proxy:
+        return
+    import socket
+    u = urlparse(proxy)
+    end = time.time() + timeout
+    shown = False
+    while time.time() < end:
+        try:
+            with socket.create_connection((u.hostname, u.port or 80), timeout=3):
+                return
+        except OSError:
+            if not shown:
+                print(f"[pre] esperando a que el proxy {proxy} (ZAP) esté listo...")
+                shown = True
+            time.sleep(3)
+    raise SystemExit(f"El proxy {proxy} no respondió en {timeout}s; revise 'docker compose logs zap'.")
+
+
 TARGETS = {"apache": "http://apache", "nginx": "http://nginx"}
 ALLOWED_HOSTS = {"apache", "nginx", "localhost", "127.0.0.1"}
 ALLOWED_SUFFIXES = (".lab.local",)
@@ -83,6 +103,8 @@ def main() -> int:
     run_id = args.run_id or f"{label}-{args.mode}-{datetime.now(timezone.utc):%Y%m%dT%H%M%S}"
     hard = args.mode == "hardened"
     started = utcnow()
+
+    wait_for_proxy(proxy)
 
     # Precondición: dejar la cuenta desbloqueada y con el contador en cero.
     for _ in range(3):
