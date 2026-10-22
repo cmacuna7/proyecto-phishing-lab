@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block title %}Panel · Portal de prueba{% endblock %}
+{% block body %}
+  <h1>Acceso concedido</h1>
+  <p class="sub">Sesión iniciada como <strong>{{ user }}</strong> (cuenta ficticia).</p>
+  <form method="post" action="/logout"><button type="submit">Cerrar sesión</button></form>
+{% endblock %}

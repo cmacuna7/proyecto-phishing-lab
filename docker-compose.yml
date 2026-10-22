@@ -1,0 +1,87 @@
+# Laboratorio de simulación de phishing y monitoreo.
+#   2 equipos de usuario (client1, client2) · Apache · NGINX · máquina de monitoreo (OWASP ZAP)
+# Las dos apps (app-apache / app-nginx) son la MISMA aplicación; cada servidor web publica la suya.
+name: seg-phishing-lab
+
+x-app-env: &app-env
+  CONTROLS_MODE: ${CONTROLS_MODE:-hardened}      # baseline = sin controles | hardened = con controles
+  MAX_FAILED_ATTEMPTS: ${MAX_FAILED_ATTEMPTS:-3}
+  LOCK_SECONDS: ${LOCK_SECONDS:-120}
+  LAB_USER: ${LAB_USER:-usuario.demo}
+  LAB_PASSWORD: ${LAB_PASSWORD:-LabDemo#2026}     # cuenta FICTICIA, solo laboratorio
+  SECRET_KEY: ${SECRET_KEY:-laboratorio-no-usar-en-produccion}
+  TRUSTED_PROXY_HOPS: "1"
+
+services:
+  app-apache:
+    build: ./app
+    environment:
+      <<: *app-env
+      SERVER_LABEL: apache
+    volumes:
+      - ./logs/app-apache:/var/log/lab-app
+      - ./data/app-apache:/var/lib/lab-app
+    networks: [lab-net]
+
+  app-nginx:
+    build: ./app
+    environment:
+      <<: *app-env
+      SERVER_LABEL: nginx
+    volumes:
+      - ./logs/app-nginx:/var/log/lab-app
+      - ./data/app-nginx:/var/lib/lab-app
+    networks: [lab-net]
+
+  apache:
+    image: httpd:2.4
+    hostname: apache.lab.local
+    depends_on: [app-apache]
+    volumes:
+      - ./servers/apache/httpd.conf:/usr/local/apache2/conf/httpd.conf:ro
+      - ./logs/apache:/usr/local/apache2/logs
+    ports: ["127.0.0.1:8081:80"]
+    networks:
+      lab-net:
+        aliases: [apache]
+
+  nginx:
+    image: nginx:1.27-alpine
+    hostname: nginx.lab.local
+    depends_on: [app-nginx]
+    volumes:
+      - ./servers/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./logs/nginx:/var/log/nginx
+    ports: ["127.0.0.1:8082:80"]
+    networks:
+      lab-net:
+        aliases: [nginx]
+
+  # Máquina de monitoreo: OWASP ZAP como proxy. Solo accesible desde este equipo (127.0.0.1).
+  zap:
+    image: ghcr.io/zaproxy/zaproxy:stable
+    hostname: zap.lab.local
+    command: >
+      zap.sh -daemon -host 0.0.0.0 -port 8090
+      -config api.addrs.addr.name=.* -config api.addrs.addr.regex=true
+      -config api.disablekey=true
+    ports: ["127.0.0.1:8090:8090"]
+    networks: [lab-net]
+
+  client1:
+    build: ./clients
+    hostname: client1.lab.local
+    environment: {LAB_PROXY: "http://zap:8090", LAB_PASSWORD: "${LAB_PASSWORD:-LabDemo#2026}", LOCK_SECONDS: "${LOCK_SECONDS:-120}"}
+    volumes: ["./scripts:/lab/scripts:ro", "./evidence:/lab/evidence", "./logs:/lab/logs:ro", "./phishing:/lab/phishing"]
+    networks: [lab-net]
+
+  client2:
+    build: ./clients
+    hostname: client2.lab.local
+    environment: {LAB_PASSWORD: "${LAB_PASSWORD:-LabDemo#2026}", LOCK_SECONDS: "${LOCK_SECONDS:-120}"}   # sin proxy: conexión directa
+    volumes: ["./scripts:/lab/scripts:ro", "./evidence:/lab/evidence", "./logs:/lab/logs:ro", "./phishing:/lab/phishing"]
+    networks: [lab-net]
+
+networks:
+  lab-net:
+    driver: bridge

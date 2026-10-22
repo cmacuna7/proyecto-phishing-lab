@@ -1,0 +1,21 @@
+# Estado y registros generados por el laboratorio (se versionan solo los extractos curados en evidence/)
+/logs/
+/data/
+.env
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+
+# Sistema / editores
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+~$*
+
+# Evidencia cruda: no subir nada que contenga secretos
+evidence/**/*.har
+evidence/**/*.session

@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Portal de prueba{% endblock %}</title>
+  <style>
+    :root { --ink:#1b2430; --muted:#5b6675; --line:#d5dbe3; --bg:#f4f6f9; --warn:#fff4d6; --warnline:#e0b84c; --err:#fde8e8; --errline:#d46a6a; --lock:#fff0e0; --lockline:#e08a2e; }
+    * { box-sizing:border-box; }
+    body { margin:0; font:16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; color:var(--ink); background:var(--bg); }
+    .banner { background:var(--warn); border-bottom:1px solid var(--warnline); padding:8px 16px; font-size:14px; text-align:center; }
+    main { max-width:420px; margin:40px auto; padding:0 16px; }
+    .card { background:#fff; border:1px solid var(--line); border-radius:10px; padding:24px; }
+    h1 { font-size:22px; margin:0 0 4px; }
+    p.sub { margin:0 0 20px; color:var(--muted); font-size:14px; }
+    label { display:block; font-size:14px; margin:14px 0 4px; }
+    input[type=text], input[type=password] { width:100%; padding:10px 12px; border:1px solid var(--line); border-radius:6px; font:inherit; }
+    button { margin-top:18px; width:100%; padding:11px; border:0; border-radius:6px; background:#1f4e8c; color:#fff; font:inherit; cursor:pointer; }
+    .msg { margin-top:16px; padding:10px 12px; border-radius:6px; font-size:14px; border:1px solid; }
+    .msg.error { background:var(--err); border-color:var(--errline); }
+    .msg.locked { background:var(--lock); border-color:var(--lockline); }
+    footer { margin-top:18px; font-size:12px; color:var(--muted); text-align:center; }
+  </style>
+</head>
+<body>
+  <div class="banner"><strong>SIMULACIÓN ACADÉMICA</strong> — laboratorio aislado. No ingrese datos ni contraseñas reales.</div>
+  <main>
+    <div class="card">{% block body %}{% endblock %}</div>
+    <footer>Servidor: <strong>{{ server }}</strong> · Controles: <strong>{{ mode }}</strong></footer>
+  </main>
+</body>
+</html>

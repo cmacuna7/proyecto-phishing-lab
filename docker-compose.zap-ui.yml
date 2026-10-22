@@ -1,0 +1,9 @@
+# OPCIONAL: ZAP con interfaz gráfica en el navegador (para las capturas de pantalla).
+# Uso:  docker compose -f docker-compose.yml -f docker-compose.zap-ui.yml up -d zap
+# La interfaz queda en http://localhost:8080/zap (solo este equipo). El proxy sigue en :8090.
+services:
+  zap:
+    command: zap-webswing.sh
+    ports:
+      - "127.0.0.1:8080:8080"
+      - "127.0.0.1:8090:8090"

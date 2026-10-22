@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Iniciar sesión · Portal de prueba{% endblock %}
+{% block body %}
+  <h1>Portal de servicios (prueba)</h1>
+  <p class="sub">Inicie sesión con la cuenta ficticia del laboratorio.</p>
+  <form method="post" action="/login" autocomplete="off">
+    <label for="username">Usuario</label>
+    <input id="username" name="username" type="text" maxlength="64" required autofocus>
+    <label for="password">Contraseña</label>
+    <input id="password" name="password" type="password" maxlength="128" required>
+    <button type="submit">Ingresar</button>
+  </form>
+  {% if message %}<div class="msg {{ kind }}" role="alert">{{ message }}</div>{% endif %}
+{% endblock %}
