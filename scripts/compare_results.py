@@ -26,6 +26,20 @@ def audit_count(audit_dir: Path, target: str, run_id: str) -> str:
     return str(n)
 
 
+def risk_level(run):
+    """Nivel R-01 de matrices/matriz_riesgos.xlsx: inicial (baseline) o residual (hardened). Necesita openpyxl."""
+    try:
+        import openpyxl
+        wb = openpyxl.load_workbook(Path(__file__).resolve().parents[1] / "matrices" / "matriz_riesgos.xlsx", data_only=True)
+        if run["meta"]["mode"] == "baseline":
+            ws = wb["Inicial"]; v, c = ws["H5"].value, ws["I5"].value
+        else:
+            ws = wb["Residual"]; v, c = ws["I5"].value, ws["J5"].value
+        return f"{v} ({c})" if v is not None else "(abrir la matriz y recalcular)"
+    except Exception:
+        return "(ver matriz)"
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--results", default="evidence/resultados/*.json")
@@ -52,7 +66,7 @@ def main():
         ("Credenciales correctas durante el bloqueo (HTTP)", [str(get(r, "S2")["http_status"]) for r in runs]),
         ("Credenciales correctas tras finalizar el bloqueo (HTTP)", [str(get(r, "S3")["http_status"]) for r in runs]),
         ("Todos los pasos coinciden con lo esperado", ["Sí" if all(x["passed"] for x in r["attempts"]) else "No" for r in runs]),
-        ("Variación del nivel de riesgo estimado", ["(completar con la matriz)"] * len(runs)),
+        ("Nivel de riesgo estimado de fuerza bruta (R-01)", [risk_level(r) for r in runs]),
     ]
     out = ["# Comparación antes y después / Apache vs NGINX", "",
            "| Criterio | " + " | ".join(cols) + " |", "|---|" + "---|" * len(cols)]
