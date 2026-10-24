@@ -11,8 +11,8 @@ Proyecto de la Unidad 1 de *Ingeniería de Seguridad del Software* (ESPE). Todo 
 | `docker-compose.yml` | Laboratorio completo: 2 apps, Apache, NGINX, OWASP ZAP (proxy), `client1` (pasa por ZAP) y `client2` (directo). |
 | `scripts/` | `run_scenario.py` (escenarios S1–S3), `analyze_logs.py`, `compare_results.py`, `zap_export.py`, `make_qr.py`. |
 | `phishing/` | Mensaje simulado y códigos QR (solo hacia el laboratorio). |
-| `matrices/` | `matriz_riesgos.xlsx` (hojas Inicial, Residual, Escala) — **borrador**. |
-| `docs/` | Plan de trabajo, laboratorio, diseño (UML), investigación de casos reales y esqueleto del informe. |
+| `matrices/` | `matriz_riesgos.xlsx` (hojas Inicial, Residual, Escala), riesgos R-01 a R-07. |
+| `docs/` | Plan de trabajo, laboratorio, diseño (UML), investigación de casos reales y correcciones del informe. |
 | `evidence/` | Capturas, logs curados, exportaciones de ZAP, resultados y análisis. |
 
 ## Inicio rápido
@@ -27,6 +27,9 @@ make scenario-apache && make scenario-nginx
 make analyze && make compare
 make test                   # pruebas unitarias (no requiere Docker)
 ```
+
+`make compare` lee los registros de `logs/`. Si ya se borraron, use los copiados en la evidencia:
+`python scripts/compare_results.py --logs-dir evidence/logs/hardened`.
 
 Accesos: Apache `http://127.0.0.1:8081`, NGINX `http://127.0.0.1:8082`, API de ZAP `127.0.0.1:8090`.
 Cuenta ficticia: `usuario.demo` / `LabDemo#2026`.
@@ -52,12 +55,12 @@ Cuenta ficticia: `usuario.demo` / `LabDemo#2026`.
 | Matrices inicial y residual con la misma escala | `matrices/matriz_riesgos.xlsx` |
 | Mapeo NIST CSF 2.0 e ISO/IEC 27005 | matriz (hoja Residual), `docs/informe/informe.md` |
 | Comparación antes/después y Apache vs NGINX | `scripts/compare_results.py` |
-| Informe técnico, evidencia y demo | `docs/informe/`, `evidence/` |
+| Informe técnico, evidencia y demo | Informe en Word (fuera del repositorio), `docs/informe/correcciones-informe.md`, `evidence/` |
 
-## Estado y limitaciones (leer antes de entregar)
+## Estado y limitaciones
 
-- **Verificado:** pruebas unitarias (16/16) y ejecución real de la app detrás de Apache y NGINX en ambos modos, con análisis de logs.
-- **NO verificado:** ejecución con Docker Compose, integración con ZAP y `scripts/zap_export.py`. Hay que probarlos en un equipo con Docker y corregir lo que falle.
-- El laboratorio usa **HTTP sin TLS** (limitación documentada; se refleja en el riesgo R-06).
-- Los valores de las matrices son **estimaciones iniciales**: deben justificarse con la evidencia real.
-- Los casos reales de phishing están en `docs/investigacion/casos-phishing.md`; verifique las fuentes y cámbielas si desean casos más recientes.
+- **Verificado (22/10/2026):** laboratorio completo con Docker Compose, captura con ZAP y `zap_export.py`, escenario S1–S3 en Apache y NGINX en ambos modos, y correlación de 7 intentos entre auditoría, `access.log` y ZAP (`evidence/`). Pruebas unitarias: 16/16.
+- El laboratorio usa **HTTP sin TLS** (limitación documentada; riesgo R-06).
+- Los valores de las matrices son valoraciones del equipo; cada uno está marcado como OBSERVADO o JUICIO.
+- Las pruebas manuales desde el navegador (enlace `/r/qr1`, usuario desconocido, bloqueo de las 18:19) solo están en la captura del `auth.log`; los logs de `evidence/logs/` se copiaron antes.
+- Los casos reales de phishing están en `docs/investigacion/casos-phishing.md`.

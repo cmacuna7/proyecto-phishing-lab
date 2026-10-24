@@ -32,7 +32,7 @@ Construimos un laboratorio aislado donde simulamos un ataque de phishing (mensaj
 Apache con controles: 3 fallos → 401 (el 3.º avisa del bloqueo); 4.º intento → 429; contraseña correcta durante el bloqueo → 429; correcta tras el bloqueo → 302. Los 6 pasos coincidieron con lo esperado.
 
 ## 6. Riesgo (matrices)
-Se usa la misma escala en la matriz inicial y la residual: Riesgo = Probabilidad × Impacto (1–5): 1–4 bajo, 5–9 moderado, 10–16 alto, 17–25 crítico. El control baja la probabilidad (p. ej. fuerza bruta de 12 a 6), pero el riesgo no desaparece: queda un residual y el propio bloqueo puede usarse para negar el servicio a la cuenta legítima. Mapeo: NIST CSF 2.0 (PR.AA, PR.AT, PR.DS, DE.CM) e ISO/IEC 27005.
+Se usa la misma escala en la matriz inicial y la residual: Riesgo = Probabilidad × Impacto (1–5): 1–4 bajo, 5–9 moderado, 10–16 alto, 17–25 crítico. El control baja la probabilidad (fuerza bruta R-01 de 12 a 9; trazabilidad R-03 de 12 a 9), pero el riesgo no desaparece. El phishing (R-02) se queda en 16 porque ningún control implementado impide entregar la contraseña, y el propio bloqueo introduce un riesgo nuevo (R-07, de 2 a 8): cualquiera que conozca el nombre de la cuenta puede bloquearla. Mapeo: NIST CSF 2.0 (PR.AA, PR.AT, PR.DS, PR.PS, DE.CM, DE.AE, ID.RA) e ISO/IEC 27005.
 
 ## 7. Qué decir con honestidad
 - Observado = lo que muestran los logs y ZAP. Interpretado = nuestra conclusión sobre eso.
@@ -44,3 +44,5 @@ Se usa la misma escala en la matriz inicial y la residual: Riesgo = Probabilidad
 - ¿Por qué no se guardan contraseñas en el log? Evita convertir el log en una fuente de credenciales; el registro tiene una lista cerrada de campos.
 - ¿Qué hace distinto a Apache y NGINX aquí? Ambos actúan como proxy con el mismo log; se compara configuración, encabezados y comportamiento observado, no se asume rendimiento sin medirlo.
 - ¿Qué falta? TLS, MFA, límite por IP y centralizar logs (recomendaciones).
+- ¿Por qué no se bloquean los usuarios inexistentes? Por simplicidad: no se guarda estado de nombres que no existen. Tiene un costo: como solo una cuenta real llega a responder 429, tres fallos bastan para saber si una cuenta existe (enumeración). El hash de relleno solo iguala el tiempo de la respuesta 401.
+- ¿El bloqueo duró exactamente 120 s? `LOCKOUT_END` se registra con la hora programada de fin (`locked_until`); el hilo de barrido revisa cada segundo, así que el desbloqueo real ocurre como mucho ~1 s después. Lo observado es que S2 fue rechazado (429) y S3, 123 s después, entró (302).
