@@ -1,0 +1,7 @@
+run_id,target,mode,step,attempt_no,ts_utc,username,password_kind,expected_status,http_status,lock_message,retry_after,backend,elapsed_ms,passed
+apache-hardened-20261025T051056,apache,hardened,S1 fallido consecutivo,1,2026-10-25T05:11:11.478Z,usuario.demo,wrong,401,401,False,,apache,125,True
+apache-hardened-20261025T051056,apache,hardened,S1 fallido consecutivo,2,2026-10-25T05:11:11.590Z,usuario.demo,wrong,401,401,False,,apache,111,True
+apache-hardened-20261025T051056,apache,hardened,S1 fallido consecutivo,3,2026-10-25T05:11:11.699Z,usuario.demo,wrong,401,401,True,,apache,109,True
+apache-hardened-20261025T051056,apache,hardened,S1b 4.º fallido,4,2026-10-25T05:11:11.744Z,usuario.demo,wrong,429,429,True,120,apache,45,True
+apache-hardened-20261025T051056,apache,hardened,S2 correcta durante bloqueo,5,2026-10-25T05:11:11.783Z,usuario.demo,correct,429,429,True,120,apache,39,True
+apache-hardened-20261025T051056,apache,hardened,S3 correcta tras el bloqueo,6,2026-10-25T05:13:14.889Z,usuario.demo,correct,302,302,False,,apache,113,True

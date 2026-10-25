@@ -19,17 +19,17 @@ Los pendientes están en el **informe PDF**: es una versión anterior a [`inform
 | 2.1.4 | Misma app con login y cuenta ficticia en ambos servidores | ✅ | `app/`, `servers/` |
 | 2.1.5 | Mensaje simulado con enlace/QR solo al laboratorio | ✅ | `phishing/` |
 | 2.2.1 | Instalar y configurar ZAP | ✅ | servicio `zap` en `docker-compose.yml` |
-| 2.2.2 | Capturar con ZAP solicitudes **y respuestas** | ⚠️ | `evidence/zap/*.csv` tiene método, URL y código, pero no hay captura de pantalla de ZAP con una solicitud/respuesta completa |
-| 2.2.3 | Intentos fallidos y exitosos con datos ficticios | ✅ | `evidence/resultados/` |
-| 2.2.4 | Registros de Apache, NGINX y la app | ✅ | `evidence/logs/` |
+| 2.2.2 | Capturar con ZAP solicitudes **y respuestas** | ⚠️ | `evidence/corridas/*/zap/*.csv` tiene método, URL y código, pero no hay captura de pantalla de ZAP con una solicitud/respuesta completa |
+| 2.2.3 | Intentos fallidos y exitosos con datos ficticios | ✅ | `evidence/corridas/*/resultados/` |
+| 2.2.4 | Registros de Apache, NGINX y la app | ✅ | `evidence/corridas/*/logs/` |
 | 2.2.5 | Capturas de configuración, solicitudes HTTP y registros | ⚠️ | `evidence/capturas/` (11 figuras + 2 diagramas); falta la de ZAP (ver 2.2.2) |
 | 2.3.1 | Registro con fecha, usuario, resultado, IP y estado de bloqueo | ✅ | `app/labapp/audit.py` |
 | 2.3.2 | Bloqueo tras 3 fallos consecutivos | ✅ | `app/labapp/auth.py`, `app/tests/` |
 | 2.3.3 | Contraseña correcta rechazada durante el bloqueo | ✅ | paso S2 → 429 en ambos servidores. Desde el navegador no se probó (ver Fig. 8) |
 | 2.3.4–6 | Matriz inicial, controles ISO 27005 / NIST CSF 2.0, matriz residual | ✅ | `matrices/matriz_riesgos.xlsx` (R-01 a R-07) |
-| 2.4.1 | Pruebas antes y después de los controles | ✅ | `evidence/resultados/` (baseline y hardened) |
-| 2.4.2 | Comparar Apache y NGINX en las mismas condiciones | ✅ | `evidence/analisis/comparacion.md` |
-| 2.4.3 | Reconstruir la secuencia de intentos y el bloqueo con los registros | ✅ | `evidence/analisis/*_hardened.md` |
+| 2.4.1 | Pruebas antes y después de los controles | ✅ | `evidence/corridas/*/resultados/` (baseline y hardened; dos corridas, 22/10 y 25/10) |
+| 2.4.2 | Comparar Apache y NGINX en las mismas condiciones | ✅ | `evidence/corridas/comparacion.md` |
+| 2.4.3 | Reconstruir la secuencia de intentos y el bloqueo con los registros | ✅ | `evidence/corridas/*/analisis/*_hardened.md` |
 | 2.4.4 | Presentar resultados, limitaciones y recomendaciones | ✅ | informe, secciones 7–9 |
 
 ## 3. Estructura del informe técnico (PDF)

@@ -1,0 +1,9 @@
+id,ts_utc,method,url,status,rtt_ms,x_lab_run,form_fields_redacted
+10,1970-01-01T00:00:00.000Z,GET,http://nginx,,0,nginx-hardened-20261025T051316-pre,
+9,2026-10-25T05:13:16.778Z,POST,http://nginx/login,302,106,nginx-hardened-20261025T051316-pre,username=***&password=***
+11,2026-10-25T05:13:16.893Z,POST,http://nginx/login,401,91,nginx-hardened-20261025T051316,username=***&password=***
+12,2026-10-25T05:13:16.993Z,POST,http://nginx/login,401,104,nginx-hardened-20261025T051316,username=***&password=***
+13,2026-10-25T05:13:17.105Z,POST,http://nginx/login,401,89,nginx-hardened-20261025T051316,username=***&password=***
+14,2026-10-25T05:13:17.203Z,POST,http://nginx/login,429,21,nginx-hardened-20261025T051316,username=***&password=***
+15,2026-10-25T05:13:17.233Z,POST,http://nginx/login,429,18,nginx-hardened-20261025T051316,username=***&password=***
+16,2026-10-25T05:15:20.253Z,POST,http://nginx/login,302,71,nginx-hardened-20261025T051316,username=***&password=***

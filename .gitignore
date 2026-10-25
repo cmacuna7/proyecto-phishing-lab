@@ -19,3 +19,4 @@ Thumbs.db
 # Evidencia cruda: no subir nada que contenga secretos
 evidence/**/*.har
 evidence/**/*.session
+evidence/**/*.pid

@@ -90,7 +90,7 @@ def main() -> int:
     ap.add_argument("--user", default=os.getenv("LAB_USER", "usuario.demo"))
     ap.add_argument("--proxy", default=os.getenv("LAB_PROXY", ""), help="Proxy (OWASP ZAP), p. ej. http://zap:8090")
     ap.add_argument("--lock-seconds", type=int, default=int(os.getenv("LOCK_SECONDS", "120")))
-    ap.add_argument("--out-dir", default="evidence/resultados")
+    ap.add_argument("--out-dir", default="evidence/corridas/sin-nombre/resultados")
     ap.add_argument("--run-id", default="")
     args = ap.parse_args()
 

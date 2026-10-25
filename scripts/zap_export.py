@@ -2,7 +2,7 @@
 """Exporta el historial de OWASP ZAP (API REST) a CSV, SIN contraseñas.
 
 Uso típico (desde un cliente del laboratorio o la máquina de monitoreo):
-    python scripts/zap_export.py --zap http://zap:8090 --baseurl http://apache --out evidence/zap/apache.csv
+    python scripts/zap_export.py --zap http://zap:8090 --baseurl http://apache --out evidence/corridas/<corrida>/zap/apache_hardened.csv
 
 El cuerpo de las solicitudes se descarta: solo se conserva el nombre de los campos del
 formulario con su valor enmascarado (password=***). Así el CSV puede ir al repositorio.
@@ -35,7 +35,7 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--zap", default="http://zap:8090")
     ap.add_argument("--baseurl", default="", help="Filtrar por URL base (p. ej. http://nginx)")
-    ap.add_argument("--out", default="evidence/zap/zap_history.csv")
+    ap.add_argument("--out", default="evidence/corridas/sin-nombre/zap/zap_history.csv")
     ap.add_argument("--report", default="", help="Ruta para guardar además el reporte HTML de ZAP")
     a = ap.parse_args()
 

@@ -1,16 +1,17 @@
-# Atajos del laboratorio (requiere Docker + Docker Compose y `make`; en Windows usar Git Bash/WSL,
-# o copiar los comandos de cada objetivo en PowerShell).
-.PHONY: dirs up down reset baseline hardened scenario-apache scenario-nginx zap-export analyze compare test qr
+# Atajos del laboratorio (requiere Docker + Docker Compose y `make`; en Windows usar scripts/corrida.ps1).
+.PHONY: dirs up down reset baseline hardened corrida run-mode analyze compare test qr
 
 COMPOSE = docker compose
 MODE   ?= hardened
+PERSONA ?= sin-nombre
+CORRIDA ?= evidence/corridas/$(shell date +%F)_$(PERSONA)
 
 dirs:
 	mkdir -p logs/apache logs/nginx logs/app-apache logs/app-nginx data/app-apache data/app-nginx
 	chmod -R a+rwX logs data
 
 up: dirs
-	CONTROLS_MODE=$(MODE) $(COMPOSE) up -d --build
+	CONTROLS_MODE=$(MODE) $(COMPOSE) up -d --build --wait
 
 down:
 	$(COMPOSE) down
@@ -25,22 +26,32 @@ baseline:   ## sin controles (estado "antes")
 hardened:   ## con controles (estado "después")
 	$(MAKE) reset && $(MAKE) up MODE=hardened
 
-# client1 pasa por ZAP (proxy); client2 va directo (para comparar la IP de origen observada).
-scenario-apache:
-	$(COMPOSE) exec client1 python scripts/run_scenario.py --target apache --mode $(MODE)
-scenario-nginx:
-	$(COMPOSE) exec client1 python scripts/run_scenario.py --target nginx --mode $(MODE)
+# Corrida completa por persona: make corrida PERSONA=nombre-apellido  (no sobrescribe: falla si la carpeta existe)
+corrida:
+	test ! -e $(CORRIDA) || (echo "Ya existe $(CORRIDA); use CORRIDA=<otra carpeta>" && false)
+	$(MAKE) baseline && $(MAKE) run-mode MODE=baseline CORRIDA=$(CORRIDA)
+	$(MAKE) hardened && $(MAKE) run-mode MODE=hardened CORRIDA=$(CORRIDA)
+	$(MAKE) analyze CORRIDA=$(CORRIDA)
 
-zap-export:
-	$(COMPOSE) exec client1 python scripts/zap_export.py --zap http://zap:8090 --baseurl http://apache --out evidence/zap/apache_$(MODE).csv
-	$(COMPOSE) exec client1 python scripts/zap_export.py --zap http://zap:8090 --baseurl http://nginx  --out evidence/zap/nginx_$(MODE).csv
+# client1 pasa por ZAP (proxy); client2 va directo (para comparar la IP de origen observada).
+run-mode:
+	for t in apache nginx; do \
+	  $(COMPOSE) exec client1 python scripts/run_scenario.py --target $$t --mode $(MODE) --out-dir $(CORRIDA)/resultados && \
+	  $(COMPOSE) exec client1 python scripts/zap_export.py --baseurl http://$$t --out $(CORRIDA)/zap/$${t}_$(MODE).csv || exit 1; \
+	done
+	mkdir -p $(CORRIDA)/logs && cp -r logs $(CORRIDA)/logs/$(MODE) && find $(CORRIDA)/logs -name '*.pid' -delete
 
 analyze:
-	python3 scripts/analyze_logs.py --audit logs/app-apache/auth.log --access apache=logs/apache/access.log --zap-csv evidence/zap/apache_$(MODE).csv --out evidence/analisis/apache_$(MODE).md
-	python3 scripts/analyze_logs.py --audit logs/app-nginx/auth.log  --access nginx=logs/nginx/access.log  --zap-csv evidence/zap/nginx_$(MODE).csv  --out evidence/analisis/nginx_$(MODE).md
+	for m in baseline hardened; do for t in apache nginx; do \
+	  a=$(CORRIDA)/logs/$$m/app-$$t/auth.log; \
+	  python3 scripts/analyze_logs.py $$( [ -f $$a ] && echo --audit $$a ) --access $$t=$(CORRIDA)/logs/$$m/$$t/access.log \
+	    --zap-csv $(CORRIDA)/zap/$${t}_$$m.csv --out $(CORRIDA)/analisis/$${t}_$$m.md > /dev/null || exit 1; \
+	done; done
+	python3 scripts/compare_results.py --results "$(CORRIDA)/resultados/*.json" --out $(CORRIDA)/analisis/comparacion.md
+	$(MAKE) compare
 
-compare:
-	python3 scripts/compare_results.py
+compare:    ## todas las corridas: evidence/corridas/comparacion.md
+	python3 scripts/compare_results.py > /dev/null
 
 test:
 	cd app && python3 -m pytest -q

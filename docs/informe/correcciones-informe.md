@@ -125,7 +125,7 @@ El diagrama corregido está en [`docs/diseno-app.md`](../diseno-app.md), en form
 > | Aplicación detrás de Apache | `/var/log/lab-app/auth.log` | `logs/app-apache/auth.log` |
 > | Aplicación detrás de NGINX | `/var/log/lab-app/auth.log` | `logs/app-nginx/auth.log` |
 >
-> Los registros de cada corrida se copiaron a `evidence/logs/baseline/` y `evidence/logs/hardened/` antes de reiniciar el laboratorio.
+> Los registros de cada corrida se copiaron a `evidence/corridas/<fecha>_<persona>/logs/baseline/` y `.../logs/hardened/` antes de reiniciar el laboratorio (`scripts/corrida.ps1`).
 
 **Acción:** agregar al final de 4.5:
 

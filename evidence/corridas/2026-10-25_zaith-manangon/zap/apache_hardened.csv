@@ -1,0 +1,9 @@
+id,ts_utc,method,url,status,rtt_ms,x_lab_run,form_fields_redacted
+2,1970-01-01T00:00:00.000Z,GET,http://apache,,0,apache-hardened-20261025T051056-pre,
+1,2026-10-25T05:11:11.230Z,POST,http://apache/login,302,104,apache-hardened-20261025T051056-pre,username=***&password=***
+3,2026-10-25T05:11:11.376Z,POST,http://apache/login,401,97,apache-hardened-20261025T051056,username=***&password=***
+4,2026-10-25T05:11:11.495Z,POST,http://apache/login,401,90,apache-hardened-20261025T051056,username=***&password=***
+5,2026-10-25T05:11:11.606Z,POST,http://apache/login,401,88,apache-hardened-20261025T051056,username=***&password=***
+6,2026-10-25T05:11:11.715Z,POST,http://apache/login,429,24,apache-hardened-20261025T051056,username=***&password=***
+7,2026-10-25T05:11:11.761Z,POST,http://apache/login,429,18,apache-hardened-20261025T051056,username=***&password=***
+8,2026-10-25T05:13:14.788Z,POST,http://apache/login,302,94,apache-hardened-20261025T051056,username=***&password=***

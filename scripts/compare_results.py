@@ -13,10 +13,13 @@ import sys
 from pathlib import Path
 
 
-def audit_count(audit_dir: Path, target: str, run_id: str) -> str:
-    p = audit_dir / f"app-{target}" / "auth.log"
+def audit_count(audit_dir: Path, target: str, mode: str, run_id: str) -> str:
+    # Una corrida guarda logs/<modo>/app-<servidor>/; el laboratorio en vivo, logs/app-<servidor>/.
+    p = audit_dir / mode / f"app-{target}" / "auth.log"
     if not p.exists():
-        return "n/d"
+        p = audit_dir / f"app-{target}" / "auth.log"
+    if not p.exists():
+        return "0 (sin auditoría)" if mode == "baseline" else "n/d"
     n = 0
     for line in p.read_text(encoding="utf-8").splitlines():
         if not line.strip():
@@ -44,24 +47,29 @@ def risk_level(run):
 def main():
     sys.stdout.reconfigure(encoding="utf-8")  # la consola de Windows (cp1252) no imprime → ni ✔
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--results", default="evidence/resultados/*.json")
-    ap.add_argument("--logs-dir", default="logs")
-    ap.add_argument("--out", default="evidence/analisis/comparacion.md")
+    ap.add_argument("--results", default="evidence/corridas/*/resultados/*.json")
+    ap.add_argument("--logs-dir", default="", help="Por defecto, la carpeta logs/ de cada corrida")
+    ap.add_argument("--out", default="evidence/corridas/comparacion.md")
     a = ap.parse_args()
 
-    runs = [json.loads(Path(p).read_text(encoding="utf-8")) for p in sorted(glob.glob(a.results))]
+    paths = sorted(glob.glob(a.results))
+    runs = [json.loads(Path(p).read_text(encoding="utf-8"))
+            | {"corrida": Path(p).parent.parent.name, "logs": Path(a.logs_dir or Path(p).parent.parent / "logs")}
+            for p in paths]
     if not runs:
         raise SystemExit("No hay resultados. Ejecute primero scripts/run_scenario.py")
-    runs.sort(key=lambda r: (r["meta"]["mode"] != "baseline", r["meta"]["target"], r["meta"]["started"]))
+    runs.sort(key=lambda r: (r["corrida"], r["meta"]["mode"] != "baseline", r["meta"]["target"], r["meta"]["started"]))
 
     def get(r, step_prefix):
         return next((x for x in r["attempts"] if x["step"].startswith(step_prefix)), None)
 
-    cols = [f"{r['meta']['target']} · {r['meta']['mode']}" for r in runs]
+    # Si se comparan varias corridas (personas), la columna dice de cuál es cada una.
+    several = len({r["corrida"] for r in runs}) > 1
+    cols = [f"{r['meta']['target']} · {r['meta']['mode']}" + (f"<br>{r['corrida']}" if several else "") for r in runs]
     rows = [
         ("Intentos fallidos ejecutados", [str(sum(x["password_kind"] == "wrong" for x in r["attempts"])) for r in runs]),
         ("Intentos registrados por la app (auditoría)",
-         [audit_count(Path(a.logs_dir), r["meta"]["target"], r["meta"]["run_id"]) for r in runs]),
+         [audit_count(r["logs"], r["meta"]["target"], r["meta"]["mode"], r["meta"]["run_id"]) for r in runs]),
         ("Bloqueo activado al 3.er fallo consecutivo",
          ["Sí" if get(r, "S1")["lock_message"] is not None and any(x["lock_message"] and x["attempt_no"] == 3 for x in r["attempts"]) else "No" for r in runs]),
         ("4.º intento fallido (HTTP)", [str(get(r, "S1b")["http_status"]) for r in runs]),
