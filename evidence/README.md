@@ -2,10 +2,10 @@
 
 | Carpeta | Qué guardar |
 |---|---|
-| `capturas/` | Capturas de pantalla (PNG) de configuración, mensaje simulado, login, bloqueo, ZAP. |
+| `capturas/` | Figuras del informe (`figNN_*.png`, misma numeración que el PDF) y los diagramas de red y UML. Falta una captura de ZAP con solicitud/respuesta. |
 | `zap/` | Exportaciones CSV de ZAP (`apache_<modo>.csv`, `nginx_<modo>.csv`). |
-| `logs/` | Extractos curados de `auth.log` y `access.log` (no los logs completos). |
-| `resultados/` | JSON/CSV de `scripts/run_scenario.py`. |
+| `logs/` | Copia de `logs/` de cada corrida: `baseline/` (sin controles: no hay `auth.log`, es lo esperado) y `hardened/`. |
+| `resultados/` | JSON/CSV de `scripts/run_scenario.py`. `previas/` guarda corridas anteriores que no entran en la comparación. |
 | `analisis/` | Informes Markdown de `scripts/analyze_logs.py`. |
 
 ## Nomenclatura

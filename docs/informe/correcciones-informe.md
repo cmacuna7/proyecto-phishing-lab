@@ -1,6 +1,6 @@
 # Correcciones del informe técnico (para pegar en el Word)
 
-Revisión del 24/10/2026 contra el PDF del proyecto (`01_Unidad1_SEG_Proyecto.pdf`) y la evidencia del repositorio.
+Revisión del 24/10/2026 contra el PDF del proyecto (`docs/enunciado-proyecto.pdf`) y la evidencia del repositorio.
 Cada punto indica **dónde** va, **qué hacer** y el **texto nuevo**. Los números de sección son los del informe actual.
 
 > Para pegar tablas: abra este archivo en VS Code, abra la vista previa (`Ctrl+Shift+V`) y copie desde ahí;

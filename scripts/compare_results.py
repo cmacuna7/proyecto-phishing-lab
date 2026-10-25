@@ -9,6 +9,7 @@ from __future__ import annotations
 import argparse
 import glob
 import json
+import sys
 from pathlib import Path
 
 
@@ -41,6 +42,7 @@ def risk_level(run):
 
 
 def main():
+    sys.stdout.reconfigure(encoding="utf-8")  # la consola de Windows (cp1252) no imprime → ni ✔
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--results", default="evidence/resultados/*.json")
     ap.add_argument("--logs-dir", default="logs")

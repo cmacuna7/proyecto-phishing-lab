@@ -11,6 +11,7 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import sys
 import re
 from collections import Counter
 from datetime import datetime, timezone
@@ -50,6 +51,7 @@ def md_table(headers, rows):
 
 
 def main():
+    sys.stdout.reconfigure(encoding="utf-8")  # la consola de Windows (cp1252) no imprime → ni ✔
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--audit", nargs="*", default=[], help="auth.log de la app (uno o más)")
     ap.add_argument("--access", nargs="*", default=[], metavar="ETIQUETA=ARCHIVO", help="p. ej. apache=logs/apache/access.log")
