@@ -1,0 +1,7 @@
+run_id,target,mode,step,attempt_no,ts_utc,username,password_kind,expected_status,http_status,lock_message,retry_after,backend,elapsed_ms,passed
+nginx-hardened-20261027T233505,nginx,hardened,S1 fallido consecutivo,1,2026-10-27T23:36:44.991Z,usuario.demo,wrong,401,401,False,,nginx,67,True
+nginx-hardened-20261027T233505,nginx,hardened,S1 fallido consecutivo,2,2026-10-27T23:36:45.059Z,usuario.demo,wrong,401,401,False,,nginx,68,True
+nginx-hardened-20261027T233505,nginx,hardened,S1 fallido consecutivo,3,2026-10-27T23:36:45.132Z,usuario.demo,wrong,401,401,True,,nginx,73,True
+nginx-hardened-20261027T233505,nginx,hardened,S1b 4.º fallido,4,2026-10-27T23:36:45.150Z,usuario.demo,wrong,429,429,True,120,nginx,17,True
+nginx-hardened-20261027T233505,nginx,hardened,S2 correcta durante bloqueo,5,2026-10-27T23:36:45.169Z,usuario.demo,correct,429,429,True,120,nginx,19,True
+nginx-hardened-20261027T233505,nginx,hardened,S3 correcta tras el bloqueo,6,2026-10-27T23:38:48.234Z,usuario.demo,correct,302,302,False,,nginx,71,True

@@ -1,0 +1,7 @@
+run_id,target,mode,step,attempt_no,ts_utc,username,password_kind,expected_status,http_status,lock_message,retry_after,backend,elapsed_ms,passed
+apache-baseline-20261027T230723,apache,baseline,S1 fallido consecutivo,1,2026-10-27T23:07:23.601Z,usuario.demo,wrong,401,401,False,,apache,72,True
+apache-baseline-20261027T230723,apache,baseline,S1 fallido consecutivo,2,2026-10-27T23:07:23.656Z,usuario.demo,wrong,401,401,False,,apache,54,True
+apache-baseline-20261027T230723,apache,baseline,S1 fallido consecutivo,3,2026-10-27T23:07:23.715Z,usuario.demo,wrong,401,401,False,,apache,59,True
+apache-baseline-20261027T230723,apache,baseline,S1b 4.º fallido,4,2026-10-27T23:07:23.803Z,usuario.demo,wrong,401,401,False,,apache,88,True
+apache-baseline-20261027T230723,apache,baseline,S2 correcta durante bloqueo,5,2026-10-27T23:07:23.867Z,usuario.demo,correct,302,302,False,,apache,63,True
+apache-baseline-20261027T230723,apache,baseline,S3 correcta tras el bloqueo,6,2026-10-27T23:07:23.944Z,usuario.demo,correct,302,302,False,,apache,76,True

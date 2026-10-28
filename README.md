@@ -17,7 +17,7 @@ Todo es **académico**: cuenta ficticia, red aislada en Docker y enlaces/QR que 
 | Leer el enunciado del proyecto | [`docs/enunciado-proyecto.pdf`](docs/enunciado-proyecto.pdf) |
 | Ver las capturas y los resultados de cada persona | [`evidence/`](evidence/README.md) · [`evidence/corridas/comparacion.md`](evidence/corridas/comparacion.md) |
 | Ver las matrices de riesgo | [`matrices/matriz_riesgos.xlsx`](matrices/matriz_riesgos.xlsx) |
-| Preparar la exposición / demo | [`docs/guia-explicacion.md`](docs/guia-explicacion.md) y [`docs/laboratorio.md`](docs/laboratorio.md) |
+| Preparar la exposición / demo | [`docs/guion-defensa.md`](docs/guion-defensa.md) (comandos y qué decir), [`docs/guia-explicacion.md`](docs/guia-explicacion.md) y [`docs/laboratorio.md`](docs/laboratorio.md) |
 
 ---
 
@@ -92,7 +92,7 @@ docker compose down
 
 **Con `make`** (Linux/WSL): `make corrida PERSONA=nombre-apellido` hace lo mismo que `corrida.ps1`; `make test` corre las pruebas. Ver [`Makefile`](Makefile).
 
-**ZAP con interfaz gráfica** (para capturas de pantalla): `docker compose -f docker-compose.yml -f docker-compose.zap-ui.yml up -d zap` y abre http://127.0.0.1:8080/zap.
+**ZAP con interfaz gráfica** (para capturas de pantalla): `docker compose -f docker-compose.yml -f docker-compose.zap-ui.yml up -d` (sin `--wait`) y abre http://127.0.0.1:8180/zap/ (la raíz `:8180` pide un inicio de sesión de Webswing que no tiene usuarios). En ese modo `zap_export.py` no funciona; para exportar, `docker compose down` y vuelve a levantar sin el `-f`. Paso a paso en [`docs/guion-defensa.md`](docs/guion-defensa.md).
 
 ---
 

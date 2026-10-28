@@ -35,6 +35,21 @@ Texto sugerido: *"Escanee para actualizar su contraseña institucional"*.
 El QR se genera con `make qr` (o `python scripts/make_qr.py http://apache/r/qr1`) y apunta a
 `http://apache/r/qr1`, que redirige solo a `/login` de la app del laboratorio.
 
+## Abrir el enlace o el QR desde el navegador del anfitrión
+
+`http://apache/...` y `http://nginx/...` son nombres internos de la red de Docker: solo funcionan
+desde los contenedores `client1` y `client2`. Desde el navegador de Windows use el puerto publicado:
+
+| Destino | Apache | NGINX |
+|---|---|---|
+| Enlace del correo | http://127.0.0.1:8081/r/mail1 | http://127.0.0.1:8082/r/mail1 |
+| Enlace del QR | http://127.0.0.1:8081/r/qr1 | http://127.0.0.1:8082/r/qr1 |
+| Imagen del QR | `qr_apache_navegador.png` | `qr_nginx_navegador.png` |
+
+Un teléfono no puede abrir estos QR: `127.0.0.1` es el propio dispositivo que escanea y los
+puertos solo están publicados en el anfitrión. Para la demostración, muestre el QR y abra el
+enlace en el navegador del computador.
+
 ## Qué registra el laboratorio cuando alguien abre el enlace
 
 `/r/mail1` y `/r/qr1` registran un evento `LINK_VISIT` con la campaña (`ref`) en el registro de
